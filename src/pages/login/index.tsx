@@ -1,8 +1,10 @@
+import { Button } from "@/components/ui/button";
+
 export default function LoginPage() {
   return (
-    <div>
-      <h2>Login</h2>
-      <p>TODO: Google login button</p>
+    <div className="flex flex-col items-start gap-4">
+      <h2 className="text-xl font-bold">Login</h2>
+      <Button>Sign in with Google</Button>
     </div>
   );
 }
