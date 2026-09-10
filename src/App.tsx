@@ -1,9 +1,16 @@
-function App() {
+import { Suspense } from "react";
+import { BrowserRouter } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
+import AppRoutes from "./routes";
+
+export default function App() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-red-500">Hello SGT</h1>
-    </div>
+    <BrowserRouter>
+      <MainLayout>
+        <Suspense fallback={<p>loading...</p>}>
+          <AppRoutes />
+        </Suspense>
+      </MainLayout>
+    </BrowserRouter>
   );
 }
-
-export default App;
