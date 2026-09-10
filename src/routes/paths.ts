@@ -4,4 +4,5 @@ export const PATHS = {
   DASHBOARD: "/dashboard",
   SUBSCRIPTIONS: "/subscriptions",
   PROFILE: "/profile",
+  STATUS: "/status",
 } as const;

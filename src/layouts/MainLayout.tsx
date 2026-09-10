@@ -9,6 +9,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
         <Link to={PATHS.DASHBOARD}>Dashboard</Link>
         <Link to={PATHS.SUBSCRIPTIONS}>Subscriptions</Link>
         <Link to={PATHS.PROFILE}>Profile</Link>
+        <Link to={PATHS.STATUS}>Status</Link>
         <Link to={PATHS.LOGIN}>Login</Link>
       </nav>
       <main className="p-4">{children}</main>
