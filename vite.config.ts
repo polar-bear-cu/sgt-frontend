@@ -26,6 +26,11 @@ export default defineConfig(({ mode }) => {
     ]),
   );
 
+  const proxy = {
+    ...healthProxy,
+    "/api": { target: gateway, changeOrigin: true },
+  };
+
   return {
     plugins: [react(), tailwindcss(), Pages({ dirs: "src/pages" })],
     resolve: {
@@ -33,12 +38,7 @@ export default defineConfig(({ mode }) => {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
-    server: {
-      port: 5173,
-      proxy: {
-        ...healthProxy,
-        "/api": { target: gateway, changeOrigin: true },
-      },
-    },
+    server: { port: 5173, proxy },
+    preview: { port: 4173, proxy },
   };
 });
