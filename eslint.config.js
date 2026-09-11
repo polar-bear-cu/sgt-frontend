@@ -25,4 +25,10 @@ export default defineConfig([
       "react-refresh/only-export-components": "off",
     },
   },
+  {
+    files: ["src/context/AuthContext.tsx"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
 ]);
