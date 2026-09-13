@@ -10,6 +10,8 @@ export interface Session {
 export interface User {
   id: string;
   email: string;
+  name?: string;
+  picture?: string;
 }
 
 interface StoredSession extends Session {
@@ -32,9 +34,14 @@ function decodeUser(accessToken: string): User | null {
   try {
     const payload = accessToken.split(".")[1];
     const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
-    const claims = JSON.parse(json) as { sub?: string; email?: string };
+    const claims = JSON.parse(json) as {
+      sub?: string;
+      email?: string;
+      name?: string;
+      picture?: string;
+    };
     if (!claims.sub || !claims.email) return null;
-    return { id: claims.sub, email: claims.email };
+    return { id: claims.sub, email: claims.email, name: claims.name, picture: claims.picture };
   } catch {
     return null;
   }
