@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { PATHS } from "@/routes/paths";
 
@@ -20,8 +19,8 @@ export default function CallbackPage() {
       tokenType: fragment.get("token_type") ?? "Bearer",
       expiresIn: Number(fragment.get("expires_in") ?? 0),
     });
+    window.location.href = PATHS.DASHBOARD;
   }, [isAuthenticated, login]);
 
-  if (isAuthenticated) return <Navigate to={PATHS.DASHBOARD} replace />;
   return <p>Signing in...</p>;
 }
