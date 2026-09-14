@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { logout as logoutRequest, refresh as refreshRequest } from "@/api/auth";
 import { setAccessToken } from "@/api/client";
+import { PATHS } from "@/routes/paths";
 
 export interface Session {
   accessToken: string;
@@ -46,7 +47,9 @@ function decodeUser(accessToken: string): User | null {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(
+    () => window.location.pathname !== PATHS.AUTH_CALLBACK,
+  );
 
   const login = useCallback((next: Session) => {
     setAccessToken(next.accessToken);
@@ -62,6 +65,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    if (window.location.pathname === PATHS.AUTH_CALLBACK) {
+      return;
+    }
+
     let cancelled = false;
     refreshRequest().then((result) => {
       if (cancelled) return;
