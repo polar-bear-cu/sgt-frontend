@@ -1,4 +1,6 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { logout as logoutRequest, refresh as refreshRequest } from "@/api/auth";
+import { setAccessToken } from "@/api/client";
 
 export interface Session {
   accessToken: string;
@@ -13,19 +15,14 @@ export interface User {
   picture?: string;
 }
 
-interface StoredSession extends Session {
-  expiresAt: number;
-}
-
 interface AuthContextValue {
   session: Session | null;
   user: User | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (session: Session) => void;
   logout: () => void;
 }
-
-const STORAGE_KEY = "sgt_session";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -46,43 +43,41 @@ function decodeUser(accessToken: string): User | null {
   }
 }
 
-function loadStoredSession(): Session | null {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const stored = JSON.parse(raw) as StoredSession;
-    if (stored.expiresAt <= Date.now()) {
-      localStorage.removeItem(STORAGE_KEY);
-      return null;
-    }
-    return stored;
-  } catch {
-    return null;
-  }
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<Session | null>(loadStoredSession);
-  const [user, setUser] = useState<User | null>(() =>
-    session ? decodeUser(session.accessToken) : null,
-  );
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const login = useCallback((next: Session) => {
-    const stored: StoredSession = { ...next, expiresAt: Date.now() + next.expiresIn * 1000 };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+    setAccessToken(next.accessToken);
     setSession(next);
     setUser(decodeUser(next.accessToken));
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
+    setAccessToken(null);
     setSession(null);
     setUser(null);
+    void logoutRequest();
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    refreshRequest().then((result) => {
+      if (cancelled) return;
+      if (result.success && result.data) {
+        login(result.data);
+      }
+      setIsLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [login]);
 
   return (
     <AuthContext.Provider
-      value={{ session, user, isAuthenticated: session !== null, login, logout }}
+      value={{ session, user, isAuthenticated: session !== null, isLoading, login, logout }}
     >
       {children}
     </AuthContext.Provider>

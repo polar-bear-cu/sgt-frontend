@@ -32,4 +32,18 @@ export async function request<T>(call: Promise<AxiosResponse<T>>): Promise<APIRe
 
 export const Axios = axios.create({
   baseURL: "/api/v1",
+  withCredentials: true,
+});
+
+let currentAccessToken: string | null = null;
+
+export function setAccessToken(token: string | null): void {
+  currentAccessToken = token;
+}
+
+Axios.interceptors.request.use((config) => {
+  if (currentAccessToken) {
+    config.headers.Authorization = `Bearer ${currentAccessToken}`;
+  }
+  return config;
 });
