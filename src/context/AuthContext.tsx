@@ -2,7 +2,6 @@ import { createContext, useCallback, useContext, useState, type ReactNode } from
 
 export interface Session {
   accessToken: string;
-  refreshToken: string;
   tokenType: string;
   expiresIn: number;
 }

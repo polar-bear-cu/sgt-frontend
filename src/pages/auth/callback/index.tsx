@@ -10,12 +10,10 @@ export default function CallbackPage() {
 
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const accessToken = fragment.get("access_token");
-    const refreshToken = fragment.get("refresh_token");
-    if (!accessToken || !refreshToken) return;
+    if (!accessToken) return;
 
     login({
       accessToken,
-      refreshToken,
       tokenType: fragment.get("token_type") ?? "Bearer",
       expiresIn: Number(fragment.get("expires_in") ?? 0),
     });
