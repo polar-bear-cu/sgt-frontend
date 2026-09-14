@@ -3,11 +3,9 @@ import { useAuth } from "@/context/AuthContext";
 import { PATHS } from "@/routes/paths";
 
 export default function CallbackPage() {
-  const { login, isAuthenticated } = useAuth();
+  const { login } = useAuth();
 
   useEffect(() => {
-    if (isAuthenticated) return;
-
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const accessToken = fragment.get("access_token");
     if (!accessToken) return;
@@ -18,7 +16,7 @@ export default function CallbackPage() {
       expiresIn: Number(fragment.get("expires_in") ?? 0),
     });
     window.location.href = PATHS.DASHBOARD;
-  }, [isAuthenticated, login]);
+  }, [login]);
 
   return <p>Signing in...</p>;
 }
