@@ -8,3 +8,5 @@ export const PATHS = {
   PROFILE: "/profile",
   STATUS: "/status",
 } as const;
+
+export const PUBLIC_PATHS = [PATHS.LOGIN, PATHS.AUTH_CALLBACK] as readonly string[];
