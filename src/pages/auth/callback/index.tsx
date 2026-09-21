@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { SigningIn } from "@/components/auth/SigningIn";
 import { useAuth } from "@/context/AuthContext";
 import { PATHS } from "@/routes/paths";
 
@@ -10,7 +11,10 @@ export default function CallbackPage() {
   useEffect(() => {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const accessToken = fragment.get("access_token");
-    if (!accessToken) return;
+    if (!accessToken) {
+      navigate(`${PATHS.LOGIN}?error=missing_token`, { replace: true });
+      return;
+    }
 
     login({
       accessToken,
@@ -20,5 +24,5 @@ export default function CallbackPage() {
     navigate(PATHS.DASHBOARD, { replace: true });
   }, [login, navigate]);
 
-  return <p>Signing in...</p>;
+  return <SigningIn />;
 }
