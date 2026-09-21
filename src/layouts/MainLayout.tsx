@@ -1,18 +1,14 @@
 import type { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import { useAuth } from "@/context/AuthContext";
-import { PATHS } from "../routes/paths";
-
-const OPEN_PATHS: string[] = [PATHS.LOGIN, PATHS.AUTH_CALLBACK, PATHS.STATUS];
+import { PUBLIC_PATHS } from "../routes/paths";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { pathname } = useLocation();
 
-  if (OPEN_PATHS.includes(pathname)) return <>{children}</>;
-  if (isLoading) return null;
-  if (!isAuthenticated) return <Navigate to={PATHS.LOGIN} replace />;
+  if (!isAuthenticated || PUBLIC_PATHS.includes(pathname)) return <>{children}</>;
 
   return (
     <div className="min-h-dvh md:pr-24">
