@@ -1,10 +1,13 @@
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { PATHS } from "../routes/paths";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   const { isAuthenticated, user, logout } = useAuth();
+  const { pathname } = useLocation();
+
+  if (pathname === PATHS.LOGIN || pathname === PATHS.AUTH_CALLBACK) return <>{children}</>;
 
   return (
     <div>
