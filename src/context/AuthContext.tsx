@@ -52,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const login = useCallback((next: Session) => {
+    console.log(next.accessToken);
     setAccessToken(next.accessToken);
     setSession(next);
     setUser(decodeUser(next.accessToken));
