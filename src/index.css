@@ -39,6 +39,28 @@
   --shadow-raised: 0 1px 0 rgb(255 255 255 / 0.14) inset, 0 10px 22px -8px rgb(122 32 32 / 0.35);
 
   --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --animate-nudge: nudge 1.6s ease-in-out infinite;
+  --animate-nudge-x: nudge-x 1.6s ease-in-out infinite;
+
+  @keyframes nudge {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(6px);
+    }
+  }
+  @keyframes nudge-x {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(6px);
+    }
+  }
 }
 
 @theme inline {

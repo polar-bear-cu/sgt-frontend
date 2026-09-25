@@ -1,8 +1,7 @@
 export const PATHS = {
   LOGIN: "/login",
   AUTH_CALLBACK: "/auth/callback",
-  DASHBOARD: "/dashboard",
-  SUBSCRIPTIONS: "/subscriptions",
+  HOME: "/home",
   REPORT: "/report",
   NOTIFICATIONS: "/notifications",
   PROFILE: "/profile",
