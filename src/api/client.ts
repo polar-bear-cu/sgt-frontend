@@ -30,6 +30,12 @@ export async function request<T>(call: Promise<AxiosResponse<T>>): Promise<APIRe
   }
 }
 
+export async function unwrap<T>(call: Promise<AxiosResponse<T>>): Promise<T> {
+  const result = await request(call);
+  if (!result.success) throw result.error;
+  return result.data as T;
+}
+
 export const Axios = axios.create({
   baseURL: "/api/v1",
   withCredentials: true,
