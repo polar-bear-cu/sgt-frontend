@@ -1,3 +1,5 @@
+import type { Interceptor } from "@connectrpc/connect";
+import { createGrpcWebTransport } from "@connectrpc/connect-web";
 import axios, { type AxiosResponse } from "axios";
 
 export interface APIError {
@@ -52,4 +54,16 @@ Axios.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${currentAccessToken}`;
   }
   return config;
+});
+
+const addToken: Interceptor = (next) => (request) => {
+  if (currentAccessToken) {
+    request.header.set("authorization", `Bearer ${currentAccessToken}`);
+  }
+  return next(request);
+};
+
+export const grpcTransport = createGrpcWebTransport({
+  baseUrl: window.location.origin,
+  interceptors: [addToken],
 });

@@ -4,3 +4,4 @@ package-lock.json
 LICENSE
 Dockerfile
 nginx.conf
+src/gen

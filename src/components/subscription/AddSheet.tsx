@@ -1,15 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createSubscription, listSubscriptions } from "@/api/subscriptions";
-import { DEFAULT_TIME_IN_ADVANCED, getMe } from "@/api/users";
+import { DEFAULT_TIME_IN_ADVANCED } from "@/api/users";
 import { BottomSheet } from "@/components/BottomSheet";
 import { SubscriptionForm } from "@/components/subscription/SubscriptionForm";
+import { useMe } from "@/hooks/useMe";
 import { useToast } from "@/hooks/useToast";
 import { emptyFormValues, toInput } from "@/lib/subscription-form";
 
 export function AddSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const queryClient = useQueryClient();
   const toast = useToast();
-  const me = useQuery({ queryKey: ["me"], queryFn: getMe, enabled: open });
+  const me = useMe(open);
   const names = useQuery({
     queryKey: ["subscriptions", "names"],
     queryFn: () => listSubscriptions({ limit: 100 }),

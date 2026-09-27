@@ -48,7 +48,7 @@ function EditForm({ field, me, onClose }: { field: EditField; me: Me; onClose: (
     },
   });
   const save = useMutation({
-    mutationFn: updateMe,
+    mutationFn: (patch: UpdateMe) => updateMe(me.id, patch),
     onSuccess: (data) => {
       queryClient.setQueryData<Me>(["me"], (old) => ({ ...old, ...data }));
       toast(saved[field]);

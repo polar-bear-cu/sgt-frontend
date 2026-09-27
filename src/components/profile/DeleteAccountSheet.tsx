@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 
 export function DeleteAccountSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const queryClient = useQueryClient();
   const remove = useMutation({
-    mutationFn: deleteMe,
+    mutationFn: () => deleteMe(user?.id ?? ""),
     onSuccess: () => {
       logout();
       queryClient.clear();
