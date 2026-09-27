@@ -1,0 +1,11 @@
+version: v2
+inputs:
+  - git_repo: https://github.com/polar-bear-cu/sgt-proto.git
+    ref: 99db5e7be9a416373d37909e166eb1bba0c98386
+    subdir: proto
+    paths:
+      - user/v1
+plugins:
+  - local: protoc-gen-es
+    out: src/gen
+    opt: target=ts

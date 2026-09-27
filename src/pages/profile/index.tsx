@@ -1,15 +1,16 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { ChevronRight, Pencil, Trash2 } from "lucide-react";
 import { cn } from "cn";
 import { version } from "../../../package.json";
 import googleG from "@/assets/google-g.png";
-import { DEFAULT_CURRENCY, DEFAULT_TIME_IN_ADVANCED, getMe, type Me } from "@/api/users";
+import { DEFAULT_CURRENCY, DEFAULT_TIME_IN_ADVANCED, type Me } from "@/api/users";
 import { DeleteAccountSheet } from "@/components/profile/DeleteAccountSheet";
 import { EditProfileSheet, type EditField } from "@/components/profile/EditProfileSheet";
 import { Button } from "@/components/ui/button";
 import { useAuth, type User } from "@/context/AuthContext";
+import { useMe } from "@/hooks/useMe";
 
 function Avatar({ name, pictureUrl }: { name: string; pictureUrl: string }) {
   const [broken, setBroken] = useState(false);
@@ -159,10 +160,6 @@ function Header({
       <div className="max-w-full truncate text-[13px] text-muted-foreground">{data.email}</div>
     </div>
   );
-}
-
-function useMe() {
-  return useQuery({ queryKey: ["me"], queryFn: getMe });
 }
 
 export default function ProfilePage() {

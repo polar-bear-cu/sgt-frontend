@@ -1,4 +1,6 @@
-import { Axios, unwrap } from "./client";
+import { createClient } from "@connectrpc/connect";
+import { UserService, type User } from "@/gen/user/v1/user_pb";
+import { grpcTransport } from "./client";
 
 export interface Me {
   id: string;
@@ -17,14 +19,32 @@ export type UpdateMe = Partial<
   Pick<Me, "displayName" | "pictureUrl" | "currency" | "timeInAdvanced">
 >;
 
-export function getMe(): Promise<Me> {
-  return unwrap(Axios.get<Me>("/users/me"));
+const users = createClient(UserService, grpcTransport);
+
+function toMe(user: User | undefined): Me {
+  if (!user) throw new Error("user missing from response");
+  return {
+    id: user.id,
+    email: user.email,
+    displayName: user.name,
+    pictureUrl: user.pictureUrl,
+  };
 }
 
-export function deleteMe(): Promise<void> {
-  return unwrap(Axios.delete<void>("/users/me"));
+export async function getMe(id: string): Promise<Me> {
+  const { user } = await users.getUser({ id });
+  return toMe(user);
 }
 
-export function updateMe(patch: UpdateMe): Promise<Me> {
-  return unwrap(Axios.patch<Me>("/users/me", patch));
+export async function deleteMe(id: string): Promise<void> {
+  await users.deleteUser({ id });
+}
+
+export async function updateMe(id: string, patch: UpdateMe): Promise<Me> {
+  const { user } = await users.updateProfile({
+    id,
+    displayName: patch.displayName,
+    pictureUrl: patch.pictureUrl,
+  });
+  return toMe(user);
 }

@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => {
   const proxy = {
     ...healthProxy,
     "/api": { target: gateway, changeOrigin: true },
+    "/user.v1.UserService": { target: gateway, changeOrigin: true },
   };
 
   return {
