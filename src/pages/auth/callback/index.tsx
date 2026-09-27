@@ -21,7 +21,7 @@ export default function CallbackPage() {
       tokenType: fragment.get("token_type") ?? "Bearer",
       expiresIn: Number(fragment.get("expires_in") ?? 0),
     });
-    navigate(PATHS.DASHBOARD, { replace: true });
+    navigate(PATHS.HOME, { replace: true });
   }, [login, navigate]);
 
   return <SigningIn />;

@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
 import { useLocation } from "react-router-dom";
+import { cn } from "cn";
 import BottomNav from "@/components/BottomNav";
+import { ModalHost } from "@/components/subscription/ModalHost";
 import { useAuth } from "@/context/AuthContext";
-import { PUBLIC_PATHS } from "../routes/paths";
+import { PATHS, PUBLIC_PATHS } from "../routes/paths";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -12,10 +14,16 @@ export default function MainLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-dvh md:pr-24">
-      <main className="mx-auto w-full max-w-xl px-5 pt-6 pb-32 md:max-w-2xl md:px-8 md:pb-10">
+      <main
+        className={cn(
+          "mx-auto w-full max-w-xl px-5 pt-6 pb-32 md:px-8 md:pb-10",
+          pathname === PATHS.HOME ? "md:max-w-272" : "md:max-w-2xl",
+        )}
+      >
         {children}
       </main>
       <BottomNav />
+      <ModalHost />
     </div>
   );
 }

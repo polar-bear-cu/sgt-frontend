@@ -20,6 +20,6 @@ export default function AppRoutes() {
       ),
       children: protectedPages,
     },
-    { path: "*", element: <Navigate to={PATHS.DASHBOARD} replace /> },
+    { path: "*", element: <Navigate to={PATHS.HOME} replace /> },
   ]);
 }

@@ -30,7 +30,7 @@ export default function LoginPage() {
     window.location.href = "/api/v1/auth/google/login";
   }
 
-  if (isAuthenticated) return <Navigate to={PATHS.DASHBOARD} replace />;
+  if (isAuthenticated) return <Navigate to={PATHS.HOME} replace />;
   if (isLoading) return <AuthScreen />;
   if (signingIn) return <SigningIn />;
 
