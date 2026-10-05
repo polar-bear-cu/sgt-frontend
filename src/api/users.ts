@@ -7,6 +7,9 @@ export interface Me {
   email: string;
   displayName: string;
   pictureUrl: string;
+  role: string;
+  createdAt: string;
+  lastLoginAt: string;
   currency?: string;
   timeInAdvanced?: number;
 }
@@ -28,6 +31,10 @@ function toMe(user: User | undefined): Me {
     email: user.email,
     displayName: user.name,
     pictureUrl: user.pictureUrl,
+    role: user.role,
+    createdAt: user.createdAt,
+    lastLoginAt: user.lastLoginAt,
+    timeInAdvanced: user.timeInAdvanced || undefined,
   };
 }
 

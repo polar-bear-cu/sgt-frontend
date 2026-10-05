@@ -16,6 +16,7 @@ import { SubscriptionCard } from "@/components/home/SubscriptionCard";
 import { Toolbar } from "@/components/home/Toolbar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
+import { useMe } from "@/hooks/useMe";
 import { useModal } from "@/hooks/useModal";
 import { daysUntil } from "@/lib/format";
 import { PATHS } from "@/routes/paths";
@@ -30,6 +31,7 @@ function isUpcoming(item: Subscription): boolean {
 export default function HomePage() {
   const { user } = useAuth();
   const { openDetail } = useModal();
+  const me = useMe();
   const [query, setQuery] = useState<ListParams>({ sortBy: "nextBillingDate", order: "asc" });
   const search = useDeferredValue(query.name);
   const params = { ...query, name: search };
@@ -63,14 +65,16 @@ export default function HomePage() {
           <span className="text-[13px] text-[#f2e9df] md:text-[15px]">
             {firstName ? `Welcome, ${firstName}` : "Welcome back"}
           </span>
-          <Link
-            to={PATHS.ADMIN}
-            aria-label="Admin"
-            title="Admin"
-            className="flex size-9 items-center justify-center rounded-full bg-white/10 text-[#f2e9df] transition-colors hover:bg-white/20"
-          >
-            <ShieldCheck className="size-[18px]" />
-          </Link>
+          {me.data?.role === "admin" && (
+            <Link
+              to={PATHS.ADMIN}
+              aria-label="Admin"
+              title="Admin"
+              className="flex size-9 items-center justify-center rounded-full bg-white/10 text-[#f2e9df] transition-colors hover:bg-white/20"
+            >
+              <ShieldCheck className="size-[18px]" />
+            </Link>
+          )}
         </div>
       </header>
 

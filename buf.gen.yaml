@@ -1,7 +1,7 @@
 version: v2
 inputs:
   - git_repo: https://github.com/polar-bear-cu/sgt-proto.git
-    ref: 99db5e7be9a416373d37909e166eb1bba0c98386
+    ref: 792f91ff6e4fe88f655166e593ba2cfc9e3ab835
     subdir: proto
     paths:
       - user/v1

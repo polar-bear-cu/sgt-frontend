@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { cn } from "cn";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ChevronRight, ShieldX } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ADMIN_PAGE_SIZE, isDenied, listUsers, type Me } from "@/api/users";
 import { UserSheet } from "@/components/admin/UserSheet";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import { PATHS } from "@/routes/paths";
 
 function Avatar({ name, pictureUrl }: { name: string; pictureUrl: string }) {
@@ -41,7 +43,22 @@ function Unauthorized() {
   );
 }
 
+function RoleBadge({ role }: { role: string }) {
+  const admin = role === "admin";
+  return (
+    <span
+      className={cn(
+        "min-w-14 shrink-0 rounded-full px-2.5 py-1 text-center text-[11px] font-bold",
+        admin ? "bg-maroon/12 text-maroon" : "bg-inactive text-inactive-text",
+      )}
+    >
+      {admin ? "Admin" : "User"}
+    </span>
+  );
+}
+
 export default function AdminPage() {
+  const { user } = useAuth();
   const [selected, setSelected] = useState<Me | null>(null);
 
   const list = useInfiniteQuery({
@@ -96,13 +113,21 @@ export default function AdminPage() {
                 >
                   <Avatar name={item.displayName || item.email} pictureUrl={item.pictureUrl} />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-semibold">
-                      {item.displayName || "No name"}
+                    <span className="flex items-center gap-1.5">
+                      <span className="truncate font-semibold">
+                        {item.displayName || "No name"}
+                      </span>
+                      {item.id === user?.id && (
+                        <span className="shrink-0 rounded-full bg-maroon/10 px-2 py-0.5 text-[10px] font-bold text-maroon">
+                          You
+                        </span>
+                      )}
                     </span>
                     <span className="block truncate text-[13px] text-muted-foreground">
                       {item.email}
                     </span>
                   </span>
+                  <RoleBadge role={item.role} />
                   <ChevronRight className="size-4 text-muted-foreground" />
                 </button>
               </li>
