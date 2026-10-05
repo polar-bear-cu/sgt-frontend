@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
-import { deleteMe } from "@/api/users";
+import { deleteUser } from "@/api/users";
 import { BottomSheet, SheetTitle } from "@/components/BottomSheet";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
@@ -9,7 +9,7 @@ export function DeleteAccountSheet({ open, onClose }: { open: boolean; onClose: 
   const { logout, user } = useAuth();
   const queryClient = useQueryClient();
   const remove = useMutation({
-    mutationFn: () => deleteMe(user?.id ?? ""),
+    mutationFn: () => deleteUser(user?.id ?? ""),
     onSuccess: () => {
       logout();
       queryClient.clear();

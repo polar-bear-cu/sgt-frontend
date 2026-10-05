@@ -1,5 +1,7 @@
 import { useDeferredValue, useState } from "react";
 import { keepPreviousData, useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { ShieldCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import {
   getSummary,
@@ -16,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useModal } from "@/hooks/useModal";
 import { daysUntil } from "@/lib/format";
+import { PATHS } from "@/routes/paths";
 
 const UPCOMING_DAYS = 7;
 
@@ -56,9 +59,19 @@ export default function HomePage() {
     <div>
       <header className="-mx-5 -mt-6 flex items-center justify-between bg-maroon px-5 pt-[18px] pb-[26px] md:mx-0 md:mt-0 md:mb-6 md:rounded-sheet md:px-7 md:py-[22px]">
         <img src={logo} alt="Sub Glu Tee" className="size-10 object-contain md:size-11" />
-        <span className="text-[13px] text-[#f2e9df] md:text-[15px]">
-          {firstName ? `Welcome, ${firstName}` : "Welcome back"}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-[13px] text-[#f2e9df] md:text-[15px]">
+            {firstName ? `Welcome, ${firstName}` : "Welcome back"}
+          </span>
+          <Link
+            to={PATHS.ADMIN}
+            aria-label="Admin"
+            title="Admin"
+            className="flex size-9 items-center justify-center rounded-full bg-white/10 text-[#f2e9df] transition-colors hover:bg-white/20"
+          >
+            <ShieldCheck className="size-[18px]" />
+          </Link>
+        </div>
       </header>
 
       <div className="md:grid md:grid-cols-[380px_1fr] md:items-start md:gap-7">

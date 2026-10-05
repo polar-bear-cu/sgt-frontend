@@ -1,4 +1,4 @@
-import { createClient } from "@connectrpc/connect";
+import { Code, ConnectError, createClient } from "@connectrpc/connect";
 import { UserService, type User } from "@/gen/user/v1/user_pb";
 import { grpcTransport } from "./client";
 
@@ -36,8 +36,27 @@ export async function getMe(id: string): Promise<Me> {
   return toMe(user);
 }
 
-export async function deleteMe(id: string): Promise<void> {
+export async function deleteUser(id: string): Promise<void> {
   await users.deleteUser({ id });
+}
+
+export const ADMIN_PAGE_SIZE = 20;
+export const ROLES = ["user", "admin"] as const;
+export type Role = (typeof ROLES)[number];
+
+export async function listUsers(offset: number): Promise<Me[]> {
+  const { users: list } = await users.listUsers({ limit: ADMIN_PAGE_SIZE, offset });
+  return list.map(toMe);
+}
+
+export async function setRole(id: string, role: Role): Promise<Me> {
+  const { user } = await users.updateRole({ id, role });
+  return toMe(user);
+}
+
+export function isDenied(error: unknown): boolean {
+  const { code } = ConnectError.from(error);
+  return code === Code.PermissionDenied || code === Code.Unauthenticated;
 }
 
 export async function updateMe(id: string, patch: UpdateMe): Promise<Me> {
