@@ -145,7 +145,7 @@ export function SubscriptionForm({
         </Select>
       </Field>
 
-      <Field id="reminder" label="Reminder lead time" error={errors.reminder?.message}>
+      <Field id="reminder" label="Advance reminder time" error={errors.reminder?.message}>
         <WithSuffix suffix="days before">
           <Input
             id="reminder"

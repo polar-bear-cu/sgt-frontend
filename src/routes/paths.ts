@@ -6,6 +6,7 @@ export const PATHS = {
   NOTIFICATIONS: "/notifications",
   PROFILE: "/profile",
   STATUS: "/status",
+  ADMIN: "/admin",
 } as const;
 
 export const PUBLIC_PATHS = [PATHS.LOGIN, PATHS.AUTH_CALLBACK] as readonly string[];
