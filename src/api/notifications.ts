@@ -2,22 +2,24 @@ import { Axios, unwrap } from "./client";
 
 export interface AppNotification {
   id: string;
-  subscriptionId: string;
+  user_id: string;
+  subscription_id: string;
   title: string;
   content: string;
-  readStatus: boolean;
-  createdAt: string;
+  status: boolean;
+  read_status: boolean;
+  created_at: string;
+  sent_at: string | null;
 }
 
-interface NotificationList {
-  items: AppNotification[];
+export interface ClearResult {
+  deleted_count: number;
 }
 
-export async function listNotifications(): Promise<AppNotification[]> {
-  const { items } = await unwrap(Axios.get<NotificationList>("/notifications"));
-  return items;
+export function listNotifications(): Promise<AppNotification[]> {
+  return unwrap(Axios.get<AppNotification[]>("/notifications"));
 }
 
-export function clearNotifications(): Promise<void> {
-  return unwrap(Axios.delete<void>("/notifications"));
+export function clearNotifications(): Promise<ClearResult> {
+  return unwrap(Axios.delete<ClearResult>("/notifications"));
 }
