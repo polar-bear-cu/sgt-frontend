@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Segmented, Toggle } from "@/components/ui/controls";
 import { Field, Input, Select } from "@/components/ui/field";
 import { money } from "@/lib/format";
-import type { FormValues } from "@/lib/subscription-form";
+import { reminderHint, type FormValues } from "@/lib/subscription-form";
 
 const MAX_COST = 99999999.99;
 
@@ -45,8 +45,17 @@ export function SubscriptionForm({
   } = useForm<FormValues>({ defaultValues: defaults });
   const typedName = useWatch({ control, name: "name" }).trim();
   const trial = useWatch({ control, name: "trial" });
+  const nextBillingDate = useWatch({ control, name: "nextBillingDate" });
+  const reminder = useWatch({ control, name: "reminder" });
+  const trialEnd = useWatch({ control, name: "trialEnd" });
   const name = typedName.toLowerCase();
   const duplicate = name !== "" && existingNames?.some((item) => item.toLowerCase() === name);
+  const scheduleChanged =
+    mode === "add" ||
+    nextBillingDate !== defaults.nextBillingDate ||
+    reminder !== defaults.reminder;
+  const billingHint = scheduleChanged ? reminderHint(nextBillingDate, reminder) : undefined;
+  const trialHint = reminderHint(trialEnd, reminder);
 
   return (
     <form
@@ -122,9 +131,10 @@ export function SubscriptionForm({
         required
         error={errors.nextBillingDate?.message}
         hint={
-          mode === "edit"
+          billingHint ??
+          (mode === "edit"
             ? "Changing this date will recalculate your reminder schedule."
-            : undefined
+            : undefined)
         }
       >
         <Input
@@ -181,7 +191,12 @@ export function SubscriptionForm({
             label="Trial end date"
             required
             error={errors.trialEnd?.message}
-            hint="Cost, billing frequency and next billing date above are what you'll pay once the trial ends — you won't be charged before then."
+            hint={[
+              "Cost, billing frequency and next billing date above are what you'll pay once the trial ends. You won't be charged before then.",
+              trialHint,
+            ]
+              .filter(Boolean)
+              .join(" ")}
           >
             <Input
               id="trialEnd"
