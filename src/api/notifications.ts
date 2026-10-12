@@ -20,6 +20,10 @@ export function listNotifications(): Promise<AppNotification[]> {
   return unwrap(Axios.get<AppNotification[]>("/notifications"));
 }
 
+export function deleteNotification(id: string): Promise<void> {
+  return unwrap(Axios.delete<void>(`/notifications/${encodeURIComponent(id)}`));
+}
+
 export function clearNotifications(): Promise<ClearResult> {
   return unwrap(Axios.delete<ClearResult>("/notifications"));
 }
