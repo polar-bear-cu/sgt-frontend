@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { cn } from "cn";
 import googleLogin from "@/assets/google-login.png";
 import logo from "@/assets/logo.png";
@@ -62,13 +62,13 @@ export default function LoginPage() {
         <p className="mt-4 text-[11px] text-muted-foreground">
           By signing in, you agree to our
           <br />
-          <a href="#" className="underline">
+          <Link to={PATHS.PRIVACY} className="underline">
             Privacy policy
-          </a>{" "}
+          </Link>{" "}
           and{" "}
-          <a href="#" className="underline">
+          <Link to={PATHS.TERMS} className="underline">
             Terms &amp; Conditions
-          </a>
+          </Link>
         </p>
       </AuthSheet>
     </AuthScreen>

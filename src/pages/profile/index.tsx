@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { ChevronRight, Pencil, Trash2 } from "lucide-react";
 import { cn } from "cn";
 import { version } from "../../../package.json";
@@ -11,6 +12,7 @@ import { EditProfileSheet, type EditField } from "@/components/profile/EditProfi
 import { Button } from "@/components/ui/button";
 import { useAuth, type User } from "@/context/AuthContext";
 import { useMe } from "@/hooks/useMe";
+import { PATHS } from "@/routes/paths";
 
 function Avatar({ name, pictureUrl }: { name: string; pictureUrl: string }) {
   const [broken, setBroken] = useState(false);
@@ -165,6 +167,7 @@ function Header({
 export default function ProfilePage() {
   const { logout, user } = useAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const me = useMe();
   const [editField, setEditField] = useState<EditField>("displayName");
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -213,8 +216,8 @@ export default function ProfilePage() {
 
       <SectionTitle>About</SectionTitle>
       <Row label="App version" value={version} />
-      <Row label="Privacy Policy" href="#" />
-      <Row label="Terms & Conditions" href="#" />
+      <Row label="Privacy Policy" onClick={() => navigate(PATHS.PRIVACY)} />
+      <Row label="Terms & Conditions" onClick={() => navigate(PATHS.TERMS)} />
 
       <Button
         variant="outline"
