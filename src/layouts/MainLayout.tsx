@@ -17,7 +17,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
       <main
         className={cn(
           "mx-auto w-full max-w-xl px-5 pt-6 pb-32 md:px-8 md:pb-10",
-          pathname === PATHS.HOME ? "md:max-w-272" : "md:max-w-2xl",
+          pathname === PATHS.HOME || pathname === PATHS.REPORT ? "md:max-w-272" : "md:max-w-2xl",
         )}
       >
         {children}
