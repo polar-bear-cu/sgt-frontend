@@ -1,6 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import { Bell, ChartNoAxesColumn, House, Plus, User } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import { cn } from "cn";
+import { getUnreadCount } from "@/api/notifications";
 import { PATHS } from "@/routes/paths";
 
 const itemClass =
@@ -11,6 +13,13 @@ function navClass({ isActive }: { isActive: boolean }) {
 }
 
 export default function BottomNav() {
+  const unread = useQuery({
+    queryKey: ["notifications", "unread-count"],
+    queryFn: getUnreadCount,
+    refetchInterval: 60_000,
+  });
+  const hasUnread = (unread.data?.unread_count ?? 0) > 0;
+
   return (
     <nav
       aria-label="Main"
@@ -29,8 +38,18 @@ export default function BottomNav() {
       >
         <Plus className="size-[22px]" />
       </Link>
-      <NavLink to={PATHS.NOTIFICATIONS} aria-label="Notifications" className={navClass}>
+      <NavLink
+        to={PATHS.NOTIFICATIONS}
+        aria-label={hasUnread ? "Notifications, unread" : "Notifications"}
+        className={(state) => cn(navClass(state), "relative")}
+      >
         <Bell className="size-[18px]" />
+        {hasUnread && (
+          <span
+            aria-hidden="true"
+            className="absolute -top-0.5 -right-0.5 size-3 rounded-full bg-gold ring-2 ring-maroon"
+          />
+        )}
       </NavLink>
       <NavLink to={PATHS.PROFILE} aria-label="Profile" className={navClass}>
         <User className="size-[18px]" />

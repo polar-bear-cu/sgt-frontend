@@ -18,9 +18,16 @@ export function NotificationCard({ item }: { item: AppNotification }) {
   return (
     <li className="flex items-start gap-3 rounded-card border border-sand/70 bg-card px-3.5 py-3 shadow-card">
       <div className="min-w-0 flex-1">
-        <p className="truncate font-display text-[19px] leading-tight font-semibold">
-          {item.title}
-        </p>
+        <div className="flex items-center gap-2">
+          {!item.read_status && (
+            <span className="size-2 shrink-0 rounded-full bg-maroon">
+              <span className="sr-only">Unread</span>
+            </span>
+          )}
+          <p className="truncate font-display text-[19px] leading-tight font-semibold">
+            {item.title}
+          </p>
+        </div>
         <p className="mt-1 text-xs text-ink-muted">{item.content}</p>
       </div>
       <button

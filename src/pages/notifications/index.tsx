@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Trash2 } from "lucide-react";
-import { listNotifications } from "@/api/notifications";
+import { listNotifications, markAllRead } from "@/api/notifications";
 import { ClearNotificationsSheet } from "@/components/notifications/ClearNotificationsSheet";
 import { NotificationCard } from "@/components/notifications/NotificationCard";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,18 @@ export default function NotificationsPage() {
   const [clearing, setClearing] = useState(false);
   const list = useQuery({ queryKey: ["notifications"], queryFn: listNotifications });
   const items = list.data ?? [];
+  const hasUnread = items.some((item) => !item.read_status);
+
+  const queryClient = useQueryClient();
+  const { mutate: markRead } = useMutation({
+    mutationFn: markAllRead,
+    onSuccess: () =>
+      void queryClient.invalidateQueries({ queryKey: ["notifications", "unread-count"] }),
+  });
+
+  useEffect(() => {
+    if (hasUnread) markRead();
+  }, [hasUnread, markRead]);
 
   return (
     <div>
