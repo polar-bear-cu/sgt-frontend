@@ -4,7 +4,9 @@ import type {
   SubscriptionInput,
   SubscriptionType,
 } from "@/api/subscriptions";
-import { fromDateInput, toDateInput } from "@/lib/format";
+import { daysUntil, fromDateInput, toDateInput } from "@/lib/format";
+
+const REMINDER_HOUR = 9;
 
 export interface FormValues {
   name: string;
@@ -41,6 +43,16 @@ export function toFormValues(item: Subscription): FormValues {
     trial: item.ftEndDate !== null,
     trialEnd: item.ftEndDate ? toDateInput(item.ftEndDate) : "",
   };
+}
+
+export function reminderHint(date: string, reminder: number): string | undefined {
+  if (date === "" || !Number.isInteger(reminder) || reminder < 1) return undefined;
+  const days = daysUntil(fromDateInput(date));
+  if (days < 0 || days > reminder) return undefined;
+  if (days === 0 && new Date().getHours() >= REMINDER_HOUR) {
+    return "This date is today, so it's too late for a reminder email.";
+  }
+  return `This date is already within your reminder window, so we'll email you at the next ${REMINDER_HOUR}:00 AM check.`;
 }
 
 export function toInput(values: FormValues): SubscriptionInput {
