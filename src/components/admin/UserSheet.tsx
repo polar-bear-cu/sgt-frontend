@@ -18,7 +18,8 @@ export function UserSheet({ target, onClose }: { target: Me | null; onClose: () 
   const done = (message: string) => {
     void queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
     toast(message);
-    close();
+    back();
+    onClose();
   };
   const role = useMutation({
     mutationFn: () => setRole(target?.id ?? "", "admin"),
