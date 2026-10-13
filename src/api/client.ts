@@ -1,4 +1,4 @@
-import type { Interceptor } from "@connectrpc/connect";
+import { Code, ConnectError, type Interceptor } from "@connectrpc/connect";
 import { createGrpcWebTransport } from "@connectrpc/connect-web";
 import axios, { type AxiosResponse } from "axios";
 
@@ -49,6 +49,22 @@ export function setAccessToken(token: string | null): void {
   currentAccessToken = token;
 }
 
+let refreshing: Promise<boolean> | null = null;
+
+function refreshAccessToken(): Promise<boolean> {
+  refreshing ??= axios
+    .post<{ accessToken: string }>("/api/v1/auth/refresh", null, { withCredentials: true })
+    .then((response) => {
+      currentAccessToken = response.data.accessToken;
+      return true;
+    })
+    .catch(() => false)
+    .finally(() => {
+      refreshing = null;
+    });
+  return refreshing;
+}
+
 Axios.interceptors.request.use((config) => {
   if (currentAccessToken) {
     config.headers.Authorization = `Bearer ${currentAccessToken}`;
@@ -56,11 +72,34 @@ Axios.interceptors.request.use((config) => {
   return config;
 });
 
-const addToken: Interceptor = (next) => (request) => {
+Axios.interceptors.response.use(undefined, async (error) => {
+  const config = error.config;
+  if (
+    axios.isAxiosError(error) &&
+    error.response?.status === 401 &&
+    config &&
+    !config.retried &&
+    (await refreshAccessToken())
+  ) {
+    config.retried = true;
+    return Axios(config);
+  }
+  throw error;
+});
+
+const addToken: Interceptor = (next) => async (request) => {
   if (currentAccessToken) {
     request.header.set("authorization", `Bearer ${currentAccessToken}`);
   }
-  return next(request);
+  try {
+    return await next(request);
+  } catch (error) {
+    if (ConnectError.from(error).code !== Code.Unauthenticated || !(await refreshAccessToken())) {
+      throw error;
+    }
+    request.header.set("authorization", `Bearer ${currentAccessToken}`);
+    return next(request);
+  }
 };
 
 export const grpcTransport = createGrpcWebTransport({

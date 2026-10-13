@@ -141,7 +141,7 @@ function Details({
     <>
       <div className="mb-4 flex items-center justify-between">
         <div className="flex min-w-0 items-center gap-3">
-          <AppTile name={item.name} className="size-11 rounded-2xl" />
+          <AppTile name={item.name} category={item.category} className="size-11 rounded-2xl" />
           <div className="min-w-0">
             <div className="truncate text-[19px] font-bold">{item.name}</div>
             <StatusBadge status={item.status} />

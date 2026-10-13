@@ -1,23 +1,12 @@
 import { useState, type ReactNode } from "react";
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight, Download } from "lucide-react";
-import { cn } from "cn";
 import { downloadCharges, getCharges, type MonthCharges } from "@/api/reports";
 import { Loadable } from "@/components/report/Loadable";
 import { Button } from "@/components/ui/button";
+import { categoryColor } from "@/lib/category";
 import { useToast } from "@/hooks/useToast";
 import { baht, currentMonth, dayParts, monthLong, shiftMonth, titleCase } from "@/lib/report";
-
-const COLORS: Record<string, string> = {
-  technology: "bg-maroon",
-  streaming: "bg-gold",
-  productivity: "bg-ink-muted",
-  music: "bg-[#d9cfbd]",
-};
-
-function colorOf(category: string): string {
-  return COLORS[category] ?? "bg-inactive";
-}
 
 function Month({ data, action }: { data: MonthCharges; action: ReactNode }) {
   if (data.count === 0) {
@@ -33,15 +22,21 @@ function Month({ data, action }: { data: MonthCharges; action: ReactNode }) {
           {data.categories.map((item) => (
             <span
               key={item.category}
-              className={cn("block h-full", colorOf(item.category))}
-              style={{ width: `${(item.total / data.total) * 100}%` }}
+              className="block h-full"
+              style={{
+                background: categoryColor(item.category),
+                width: `${(item.total / data.total) * 100}%`,
+              }}
             />
           ))}
         </div>
         <ul className="mt-3 grid grid-cols-2 gap-x-3.5 gap-y-2 text-[13px]">
           {data.categories.map((item) => (
             <li key={item.category} className="flex items-center gap-2">
-              <span className={cn("size-2.5 shrink-0 rounded-[3px]", colorOf(item.category))} />
+              <span
+                style={{ background: categoryColor(item.category) }}
+                className="size-2.5 shrink-0 rounded-[3px]"
+              />
               {titleCase(item.category)}
               <span className="ml-auto font-semibold">{baht(item.total)}</span>
             </li>
