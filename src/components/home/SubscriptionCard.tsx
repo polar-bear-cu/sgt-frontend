@@ -14,7 +14,11 @@ export function SubscriptionCard({ item, onOpen }: { item: Subscription; onOpen:
         className="flex h-22 w-full cursor-pointer items-center justify-between gap-2 rounded-card border border-sand/70 bg-card px-3.5 text-left shadow-card transition active:scale-[0.98]"
       >
         <span className="flex min-w-0 flex-1 items-center gap-2.5">
-          <AppTile name={item.name} className={cn("size-10", inactive && "opacity-55 grayscale")} />
+          <AppTile
+            name={item.name}
+            category={item.category}
+            className={cn("size-10", inactive && "opacity-55 grayscale")}
+          />
           <span className="min-w-0">
             <span
               className={cn(
