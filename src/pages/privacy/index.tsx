@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         ‹ Back
       </button>
       <h1 className="text-2xl font-bold">Privacy Policy</h1>
-      <p className="text-xs text-muted-foreground">Last updated October 13, 2026</p>
+      <p className="text-xs text-muted-foreground">Last updated October 16, 2026</p>
 
       <p>
         Sub Glu Tee is a student project built for a software architecture course. This policy
@@ -27,9 +27,9 @@ export default function PrivacyPage() {
         profile picture URL. We also store your account settings (role, sign-up and last sign-in
         time, default reminder days, currency), the subscriptions you add (name, cost, billing type,
         category, billing dates, reminder days, free-trial end date, status) with a record of each
-        billing date that passes, and a record of each reminder (recipient email, title, body,
-        status, send time) and in-app notification. To keep you signed in, we set an HttpOnly cookie
-        with a refresh token valid for up to 30 days; the server stores only its hash.
+        billing date that passes, and a record of each reminder (recipient email, title, status,
+        send time) and in-app notification. To keep you signed in, we set an HttpOnly cookie with a
+        refresh token valid for up to 30 days; the server stores only its hash.
       </p>
 
       <h2 className="mt-2 text-base font-semibold">Why we use it</h2>
@@ -49,17 +49,18 @@ export default function PrivacyPage() {
 
       <h2 className="mt-2 text-base font-semibold">How long we keep it</h2>
       <p>
-        Your account, subscriptions, and billing records are kept until you delete your account.
-        Notification records and sign-in session records are currently not deleted when you delete
-        your account; session records expire after 30 days. Databases are backed up daily and the
-        last 7 backups are kept, so deleted data can remain in a backup for up to 7 days.
+        Your account, subscriptions, billing records, reminder records, and in-app notifications are
+        kept until you delete your account. When you delete it, the session on that device is signed
+        out and removed at the next daily cleanup; sessions on other devices stop working and are
+        removed when they expire, within 30 days. Databases are backed up daily and the last 7
+        backups are kept, so deleted data can remain in a backup for up to 7 days.
       </p>
 
       <h2 className="mt-2 text-base font-semibold">Your choices</h2>
       <p>
         You can edit your name, currency, and default reminder on the Profile page, and delete your
-        account there, which removes your account, subscriptions, and billing records. For other
-        requests, such as removing notification records, contact the team below.
+        account there, which removes your account, subscriptions, billing records, reminder records,
+        and in-app notifications. For other requests, contact the team below.
       </p>
 
       <h2 className="mt-2 text-base font-semibold">Security</h2>
