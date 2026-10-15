@@ -108,7 +108,7 @@ function EditForm({ field, me, onClose }: { field: EditField; me: Me; onClose: (
               {...register("timeInAdvanced", {
                 valueAsNumber: true,
                 validate: (value) =>
-                  (Number.isInteger(value) && value >= 0) || "Enter 0 or more days.",
+                  (Number.isInteger(value) && value >= 1) || "Enter 1 or more days.",
               })}
             />
             <span className="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-[13px] font-semibold text-muted-foreground">

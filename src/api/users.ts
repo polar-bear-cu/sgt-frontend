@@ -34,6 +34,7 @@ function toMe(user: User | undefined): Me {
     role: user.role,
     createdAt: user.createdAt,
     lastLoginAt: user.lastLoginAt,
+    currency: user.currency || undefined,
     timeInAdvanced: user.timeInAdvanced || undefined,
   };
 }
@@ -71,6 +72,8 @@ export async function updateMe(id: string, patch: UpdateMe): Promise<Me> {
     id,
     displayName: patch.displayName,
     pictureUrl: patch.pictureUrl,
+    timeInAdvanced: patch.timeInAdvanced,
+    currency: patch.currency,
   });
   return toMe(user);
 }
