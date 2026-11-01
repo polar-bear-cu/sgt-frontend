@@ -1,18 +1,19 @@
 import { cn } from "cn";
-import type { SubscriptionStatus } from "@/api/subscriptions";
+import type { SubscriptionCategory, SubscriptionStatus } from "@/api/subscriptions";
+import { categoryColor } from "@/lib/category";
 
-const TILE_COLORS = ["#1DB954", "#111111", "#113CCF", "#E50914", "#7a2020", "#6b4fbb", "#0e7c86"];
-
-function tileColor(name: string): string {
-  let total = 0;
-  for (const letter of name) total += letter.charCodeAt(0);
-  return TILE_COLORS[total % TILE_COLORS.length];
-}
-
-export function AppTile({ name, className }: { name: string; className?: string }) {
+export function AppTile({
+  name,
+  category,
+  className,
+}: {
+  name: string;
+  category: SubscriptionCategory;
+  className?: string;
+}) {
   return (
     <span
-      style={{ background: tileColor(name) }}
+      style={{ background: categoryColor(category) }}
       className={cn(
         "flex shrink-0 items-center justify-center rounded-xl text-lg font-bold text-white shadow-[inset_0_1px_1px_rgb(255_255_255/0.5)]",
         className,
