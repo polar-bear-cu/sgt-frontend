@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { cn } from "cn";
+import AppHeader from "@/components/AppHeader";
 import BottomNav from "@/components/BottomNav";
 import { ModalHost } from "@/components/subscription/ModalHost";
 import { useAuth } from "@/context/AuthContext";
@@ -14,9 +15,12 @@ export default function MainLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-dvh md:pr-24">
+      <div className="mx-auto w-full max-w-xl px-5 pt-6 md:max-w-272 md:px-8">
+        <AppHeader />
+      </div>
       <main
         className={cn(
-          "mx-auto w-full max-w-xl px-5 pt-6 pb-32 md:px-8 md:pb-10",
+          "mx-auto w-full max-w-xl px-5 pb-32 md:px-8 md:pb-10",
           pathname === PATHS.HOME || pathname === PATHS.REPORT ? "md:max-w-272" : "md:max-w-2xl",
         )}
       >
